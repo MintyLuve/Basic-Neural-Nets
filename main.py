@@ -4,12 +4,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import  confusion_matrix, classification_report
 from collections import defaultdict
 
-# 8<------------ cut here ---------------
-neural_net_model = MLPClassifier( hidden_layer_sizes=(8),random_state=42,tol=0.005)
-
-# 8<------------ cut here ---------------
 # Load the training dataset
-train_data = pd.read_csv('fashion_mnist_20bal_train.csv')
+train_data = pd.read_csv('fashion_mnist_22unbal_train.csv')
 
 # Separate the data (features) and the  classes
 X_train = train_data.drop('class', axis=1)  # Features (all columns except the first one)
@@ -24,15 +20,17 @@ X_test = test_data.drop('class', axis=1)  # Features (all columns except the fir
 X_test = X_test / 255.0
 y_test = test_data['class']   # Target (first column)
 
-# 8<------------ cut here ---------------
+
+neural_net_model = MLPClassifier( hidden_layer_sizes=(8),random_state=42,tol=0.005)
+
 neural_net_model.fit(X_train, y_train)
-# Determine model architecture
+# Determine model architecture 
 layer_sizes = [neural_net_model.coefs_[0].shape[0]]  # Start with the input layer size
 layer_sizes += [coef.shape[1] for coef in neural_net_model.coefs_]  # Add sizes of subsequent layers
 layer_size_str = " x ".join(map(str, layer_sizes))
 print(f"Layer sizes: {layer_size_str}")
 
-# 8<------------ cut here ---------------
+
 # predict the classes from the training and test sets
 y_pred_train = neural_net_model.predict(X_train)
 y_pred = neural_net_model.predict(X_test)
@@ -67,7 +65,3 @@ overall_accuracy = overall_correct / len(y_test)*100
 print(f"Overall Test Accuracy: {overall_accuracy:3.1f}%")
 overall_training_accuracy = correct_counts_training / total_counts_training*100
 print(f"Overall Training Accuracy: {overall_training_accuracy:3.1f}%")
-
-
-
-
